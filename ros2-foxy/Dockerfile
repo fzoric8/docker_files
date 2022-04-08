@@ -107,3 +107,18 @@ RUN sudo rosdep init && \
     rosdep update && \
     rosdep install --from-paths src --ignore-src --os=ubuntu:focal --rosdistro ${ROS_DISTRO} -y --skip-keys "fastcdr rti-connext-dds-5.3.1 urdfdom_headers"
 
+WORKDIR /home/developer
+RUN mkdir -p dev_ws/src
+WORKDIR /home/developer/dev_ws/src
+RUN git clone https://github.com/ros/ros_tutorials.git -b foxy-devel 
+WORKDIR /home/developer/dev_ws
+RUN rosdep install -i --from-path src --rosdistro foxy -y 
+RUN bash -c "source /opt/ros/foxy/setup.bash; colcon build" 
+
+# Check this out
+WORKDIR /home/developer/
+RUN git clone git@github.com:osrf/mbzirc.git
+WORKDIR /home/developer/mbzirc
+
+
+CMD ["bash"]
